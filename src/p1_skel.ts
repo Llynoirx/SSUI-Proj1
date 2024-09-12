@@ -70,7 +70,7 @@ function isCanvasRenderingContext2D(ctx : any) : ctx is CanvasRenderingContext2D
 // up the interface
 class UIClass {
     // A string indicating one of several global states that the UI can be in
-    // The meaning of these strings is detrmined by the sub-class.
+    // The meaning of these strings is determined by the sub-class.
     protected _currentState : string = '';
     get currentState() {return this._currentState;}
     set currentState(v : string) {this._currentState = v;}
@@ -499,7 +499,7 @@ class FittsTestUI extends UIClass {
 
         this.currentState = newState;
         switch (this.currentState) {
-            case 'start':
+            case 'start': //display background w/ instructions
                 this.theBackground.msg1 = "Press anywhere to begin";
                 this.theBackground.msg2 = 
                     "  For each trial click the center of the blue target to begin";
@@ -509,21 +509,32 @@ class FittsTestUI extends UIClass {
 
                 // a bit more left to do...
                 // === YOUR CODE HERE ===
+                this.theTarget.visible = false;
+
 
             break;
-            case 'begin_trial':
+            case 'begin_trial': //displays Reticle: requires user to put mouse cursor on small circle
                 
                 // === YOUR CODE HERE ===
+                this.theBackground.msg1 = "Click the center of the blue target";
+                this.theReticle.visible = true;
+                this.theTarget.visible = false;
         
             break;
-            case 'in_trial':
+            case 'in_trial': //display a random sized Target (looks diff than Reticle)
                 
                 // === YOUR CODE HERE ===
+                this.theBackground.msg1 = "";
+                this.theReticle.visible = false;
+                this.theTarget.visible = true;
         
             break;
-            case 'ended':
+            case 'ended': //shows info screen that the game has ended
                 
                 // === YOUR CODE HERE ===
+                this.theBackground.msg1 = "All trials complete. Click to restart.";
+                this.theReticle.visible = false;
+                this.theTarget.visible = false;
         
                 // produce a dump of our data records on the console
                 this.presentData();
