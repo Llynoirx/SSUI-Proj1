@@ -527,9 +527,10 @@ class Target extends ScreenObject {
     // Pick function.  We only pick within our circle, not the entire bounding box
     pickedBy(ptX, ptY) {
         // === YOUR CODE HERE ===
-        // === REMOVE THE FOLLOWING CODE (which is here so the skeleton code compiles) ===
-        return false;
-        // === END OF CODE TO BE REMOVED ===
+        const ptX2 = this.centerX + this.radius;
+        const ptY2 = this.centerY + this.radius;
+        const dist = Math.sqrt(Math.pow(ptX - ptX2, 2) + Math.pow(ptY - ptY2, 2));
+        return dist <= this.radius;
     }
     // . . . . . . . . . . . .  . . . . . . . . . . . . . . . . . . . . . . 
     // Handle click input.  The interface should be in the 'in_trial' state,
@@ -537,9 +538,9 @@ class Target extends ScreenObject {
     // and starting a new one.
     handleClickAt(ptX, ptY) {
         // === YOUR CODE HERE ===
-        // === REMOVE THE FOLLOWING CODE (which is here so the skeleton code compiles) ===
-        return false;
-        // === END OF CODE TO BE REMOVED ===
+        this.parentUI.configure('in_trial');
+        this.parentUI.handleClick(ptX, ptY);
+        return true;
     }
 }
 //---------------------------------------------------------------------
@@ -583,6 +584,7 @@ class Reticle extends Target {
     // by starting the trial timer and moving to the 'in_trial' state.
     handleClickAt(ptX, ptY) {
         // === YOUR CODE HERE ===
+        this.parentUI.configure('begin_trial');
         // === REMOVE THE FOLLOWING CODE (which is here so the skeleton code compiles) ===
         return false;
         // === END OF CODE TO BE REMOVED ===
@@ -651,9 +653,8 @@ class BackgroundDisplay extends ScreenObject {
     // in which case we respond to this input by starting a new trial
     handleClickAt(ptX, ptY) {
         // === YOUR CODE HERE ===
-        // === REMOVE THE FOLLOWING CODE (which is here so the skeleton code compiles) ===
-        return false;
-        // === END OF CODE TO BE REMOVED ===
+        this.parentUI.configure('start');
+        return true;
     }
 }
 // . . . . . . . . . . . .  . . . . . . . . . . . . . . . . . . . . . . 

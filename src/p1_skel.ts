@@ -700,10 +700,11 @@ class Target extends ScreenObject{
     override pickedBy(ptX : number, ptY : number) : boolean {
         
         // === YOUR CODE HERE ===
-        
-        // === REMOVE THE FOLLOWING CODE (which is here so the skeleton code compiles) ===
-        return false;
-        // === END OF CODE TO BE REMOVED ===
+        const ptX2 = this.centerX + this.radius;
+        const ptY2 = this.centerY + this.radius;
+        const dist = Math.sqrt(Math.pow(ptX - ptX2, 2) + Math.pow(ptY - ptY2, 2));
+    
+        return dist <= this.radius;
     }
 
     // . . . . . . . . . . . .  . . . . . . . . . . . . . . . . . . . . . . 
@@ -714,11 +715,9 @@ class Target extends ScreenObject{
     override handleClickAt(ptX : number, ptY : number) : boolean {
         
         // === YOUR CODE HERE ===
-        
-        // === REMOVE THE FOLLOWING CODE (which is here so the skeleton code compiles) ===
-        return false;
-        // === END OF CODE TO BE REMOVED ===
-
+        this.parentUI.configure('in_trial');
+        this.parentUI.handleClick(ptX, ptY);
+        return true;
     }
 }
 
@@ -788,6 +787,7 @@ class Reticle extends Target {
     override handleClickAt(ptX : number, ptY : number) : boolean {
         
         // === YOUR CODE HERE ===
+        this.parentUI.configure('begin_trial');
         
         // === REMOVE THE FOLLOWING CODE (which is here so the skeleton code compiles) ===
         return false;
@@ -875,10 +875,8 @@ class BackgroundDisplay extends ScreenObject{
     override handleClickAt(ptX : number, ptY : number) : boolean {
         
         // === YOUR CODE HERE ===
-        
-        // === REMOVE THE FOLLOWING CODE (which is here so the skeleton code compiles) ===
-        return false;
-        // === END OF CODE TO BE REMOVED ===
+        this.parentUI.configure('start');
+        return true;
     }
 }
 
