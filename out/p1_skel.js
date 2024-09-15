@@ -393,21 +393,21 @@ class FittsTestUI extends UIClass {
                     "  For each trial click the center of the blue target to begin";
                 this.theBackground.msg3 =
                     "  Then click inside the green circle that appears";
-                this.theReticle.visible = false;
+                this.theReticle.visible = true;
                 // a bit more left to do...
                 // === YOUR CODE HERE ===
-                this.theTarget.visible = false;
+                this.theTarget.visible = true;
                 break;
             case 'begin_trial': //displays Reticle: requires user to put mouse cursor on small circle
                 // === YOUR CODE HERE ===
                 this.theBackground.msg1 = "Click the center of the blue target";
                 this.theReticle.visible = true;
-                this.theTarget.visible = false;
+                this.theTarget.visible = true;
                 break;
             case 'in_trial': //display a random sized Target (looks diff than Reticle)
                 // === YOUR CODE HERE ===
                 this.theBackground.msg1 = "";
-                this.theReticle.visible = false;
+                this.theReticle.visible = true;
                 this.theTarget.visible = true;
                 break;
             case 'ended': //shows info screen that the game has ended
@@ -515,9 +515,8 @@ class Target extends ScreenObject {
     // Draw the object as a filled and outlined circle
     draw(ctx) {
         // === YOUR CODE HERE ===
-        ctx.fillStyle = this.TARGET_COLOR;
+        ctx.fillStyle = this.color;
         ctx.strokeStyle = 'black';
-        ctx.lineWidth = 1;
         ctx.beginPath();
         ctx.arc(this._x, this._y, this.radius, 0, 2 * Math.PI);
         ctx.fill();
@@ -565,10 +564,29 @@ class Reticle extends Target {
     // circle that indicates the active clickable region of the object.
     draw(ctx) {
         // === YOUR CODE HERE ===
-        // const reticle = new Reticle(this.centerX, this.centerY,);   
-        // ctx.beginPath();
-        // ctx.arc(reticle.centerX, 75, 50, 0, 2 * Math.PI);
-        // ctx.stroke();
+        if (!this.visible)
+            return;
+        const outerRadius = Reticle.RETICLE_DIAM / 2;
+        const innerRadius = Reticle.RETICLE_INNER_DIAM / 2;
+        ctx.fillStyle = this.color;
+        ctx.strokeStyle = 'black';
+        // draw outer circle
+        ctx.beginPath();
+        ctx.arc(this.centerX, this.centerY, outerRadius, 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.stroke();
+        // draw inner circle
+        ctx.beginPath();
+        ctx.arc(this.centerX, this.centerY, innerRadius, 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.stroke();
+        // draw crosshairs
+        ctx.beginPath();
+        ctx.moveTo(this.centerX - outerRadius, this.centerY); //L to R
+        ctx.lineTo(this.centerX + outerRadius, this.centerY);
+        ctx.moveTo(this.centerX, this.centerY - outerRadius); //T to B
+        ctx.lineTo(this.centerX, this.centerY + outerRadius);
+        ctx.stroke();
     }
     // . . . . . . . . . . . .  . . . . . . . . . . . . . . . . . . . . . . 
     // Picking function. We are only picked within our small center region.
@@ -584,7 +602,7 @@ class Reticle extends Target {
     // by starting the trial timer and moving to the 'in_trial' state.
     handleClickAt(ptX, ptY) {
         // === YOUR CODE HERE ===
-        this.parentUI.configure('begin_trial');
+        // parent.configure('begin_trial');
         // === REMOVE THE FOLLOWING CODE (which is here so the skeleton code compiles) ===
         return false;
         // === END OF CODE TO BE REMOVED ===
