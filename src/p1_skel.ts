@@ -658,8 +658,7 @@ class Target extends ScreenObject{
         this.centerY = newCentY;
 
         if (!(newDiam === undefined)) {
-            this._w = newDiam;
-            this._h = newDiam;
+            this.diam = newDiam;
         }
         
         this.declareDamaged();
@@ -690,7 +689,7 @@ class Target extends ScreenObject{
         ctx.lineWidth = 1; 
     
         ctx.beginPath();
-        ctx.arc(this._x, this._y, this.diam/2, 0, 2 * Math.PI);
+        ctx.arc(this._x, this._y, this.radius, 0, 2 * Math.PI);
         ctx.fill();
         ctx.stroke();
     }
@@ -763,10 +762,10 @@ class Reticle extends Target {
     override draw(ctx : CanvasRenderingContext2D) : void {
         
         // === YOUR CODE HERE ===
-        const reticle = new Reticle();   
-        ctx.beginPath();
-        ctx.arc(recticle.centerX, 75, 50, 0, 2 * Math.PI);
-        ctx.stroke();
+        // const reticle = new Reticle(this.centerX, this.centerY,);   
+        // ctx.beginPath();
+        // ctx.arc(reticle.centerX, 75, 50, 0, 2 * Math.PI);
+        // ctx.stroke();
     }
 
     // . . . . . . . . . . . .  . . . . . . . . . . . . . . . . . . . . . . 
@@ -854,6 +853,19 @@ class BackgroundDisplay extends ScreenObject{
         let xpos : number = 10;
 
         // === YOUR CODE HERE ===
+        if (this._msg1) {
+            ctx.fillText(this._msg1, xpos, ypos);
+            ypos += fontHeight + leading;
+        }
+    
+        if (this._msg2) {
+            ctx.fillText(this._msg2, xpos, ypos);
+            ypos += fontHeight + leading; 
+        }
+
+        if (this._msg3) {
+            ctx.fillText(this._msg3, xpos, ypos);
+        }
     }
 
     // . . . . . . . . . . . .  . . . . . . . . . . . . . . . . . . . . . . 

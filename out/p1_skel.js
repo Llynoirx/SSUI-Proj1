@@ -104,7 +104,6 @@ class UIClass {
     run() {
         // configure the interface initial state and draw it
         this.configure('start');
-        console.log("we want to redraw now");
         this.needsRedraw = true;
         this.redraw();
         // set up an event handler for the canvas to start processing events
@@ -124,7 +123,6 @@ class UIClass {
     redraw() {
         // only redraw if something indicated we need it
         if (this.needsRedraw) {
-            console.log("we need a redraw");
             // clear the background, then redraw each of the child objects
             this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
             for (const childObj of this.childObjects) {
@@ -390,7 +388,6 @@ class FittsTestUI extends UIClass {
         this.currentState = newState;
         switch (this.currentState) {
             case 'start': //display background w/ instructions
-                console.log("we've started!");
                 this.theBackground.msg1 = "Press anywhere to begin";
                 this.theBackground.msg2 =
                     "  For each trial click the center of the blue target to begin";
@@ -439,6 +436,7 @@ class FittsTestUI extends UIClass {
             // make new random locations for reticle and target 
             const { retX: retX, retY: retY, targX: targX, targY: targY, targD: targDiam } = pickLocationsAndSize(this.canvas.width, this.canvas.height);
             // === YOUR CODE HERE ===
+            this.configure('begin_trial');
         }
     }
     get trialData() { return this._trialData; }
@@ -490,12 +488,17 @@ class Target extends ScreenObject {
     set diam(v) { this.w = this.h = v; }
     get radius() { return this.diam / 2; }
     set radius(v) { this.w = this.h = v * 2; }
-    // . . . . . . . . . . . .  . . . . . . . . . . . . . . . . . . . . . . 
+    // . . . . . . . . . . . .  . . . . . . . .  . . . . . . . . . . . . . . 
     // set a new bounding box for the object based on a center location and an 
     // optional diameter.  If diameter is not include the size is left unchanged.
     // If the diameter is supplied, both the width and height are set to that value.
     newGeom(newCentX, newCentY, newDiam) {
         // === YOUR CODE HERE ===
+        this.centerX = newCentX;
+        this.centerY = newCentY;
+        if (!(newDiam === undefined)) {
+            this.diam = newDiam;
+        }
         this.declareDamaged();
     }
     get color() { return this.TARGET_COLOR; }
@@ -512,6 +515,13 @@ class Target extends ScreenObject {
     // Draw the object as a filled and outlined circle
     draw(ctx) {
         // === YOUR CODE HERE ===
+        ctx.fillStyle = this.TARGET_COLOR;
+        ctx.strokeStyle = 'black';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.arc(this._x, this._y, this.radius, 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.stroke();
     }
     // . . . . . . . . . . . .  . . . . . . . . . . . . . . . . . . . . . . 
     // Pick function.  We only pick within our circle, not the entire bounding box
@@ -554,6 +564,10 @@ class Reticle extends Target {
     // circle that indicates the active clickable region of the object.
     draw(ctx) {
         // === YOUR CODE HERE ===
+        // const reticle = new Reticle(this.centerX, this.centerY,);   
+        // ctx.beginPath();
+        // ctx.arc(reticle.centerX, 75, 50, 0, 2 * Math.PI);
+        // ctx.stroke();
     }
     // . . . . . . . . . . . .  . . . . . . . . . . . . . . . . . . . . . . 
     // Picking function. We are only picked within our small center region.
@@ -620,6 +634,17 @@ class BackgroundDisplay extends ScreenObject {
         let ypos = 20 + fontHeight;
         let xpos = 10;
         // === YOUR CODE HERE ===
+        if (this._msg1) {
+            ctx.fillText(this._msg1, xpos, ypos);
+            ypos += fontHeight + leading;
+        }
+        if (this._msg2) {
+            ctx.fillText(this._msg2, xpos, ypos);
+            ypos += fontHeight + leading;
+        }
+        if (this._msg3) {
+            ctx.fillText(this._msg3, xpos, ypos);
+        }
     }
     // . . . . . . . . . . . .  . . . . . . . . . . . . . . . . . . . . . . 
     // Handle click input.  The interface should be in the 'start' state,
