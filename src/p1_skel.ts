@@ -646,7 +646,7 @@ class Target extends ScreenObject{
     get radius() : number {return this.diam/2;}
     set radius(v : number) {this.w = this.h = v*2}
 
-    // . . . . . . . . . . . .  . . . . . . . . . . . . . . . . . . . . . . 
+    // . . . . . . . . . . . .  . . . . . . . .  . . . . . . . . . . . . . . 
 
     // set a new bounding box for the object based on a center location and an 
     // optional diameter.  If diameter is not include the size is left unchanged.
@@ -656,7 +656,7 @@ class Target extends ScreenObject{
         // === YOUR CODE HERE ===
         this.centerX = newCentX;
         this.centerY = newCentY;
-        
+
         if (!(newDiam === undefined)) {
             this._w = newDiam;
             this._h = newDiam;
@@ -685,7 +685,14 @@ class Target extends ScreenObject{
     override draw(ctx : CanvasRenderingContext2D) : void {
         
         // === YOUR CODE HERE ===
-        
+        ctx.fillStyle = this.TARGET_COLOR;
+        ctx.strokeStyle = 'black'; 
+        ctx.lineWidth = 1; 
+    
+        ctx.beginPath();
+        ctx.arc(this._x, this._y, this.diam/2, 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.stroke();
     }
 
     // . . . . . . . . . . . .  . . . . . . . . . . . . . . . . . . . . . . 
