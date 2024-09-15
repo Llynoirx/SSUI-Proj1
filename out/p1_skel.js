@@ -397,6 +397,10 @@ class FittsTestUI extends UIClass {
                 // a bit more left to do...
                 // === YOUR CODE HERE ===
                 this.theTarget.visible = false;
+                this.canvas.onclick = (evt) => {
+                    this.handleClick(evt.offsetX, evt.offsetY);
+                    console.log("canvas clicked");
+                };
                 break;
             case 'begin_trial': //displays Reticle: requires user to put mouse cursor on small circle
                 // === YOUR CODE HERE ===
@@ -537,6 +541,8 @@ class Target extends ScreenObject {
     // and starting a new one.
     handleClickAt(ptX, ptY) {
         // === YOUR CODE HERE ===
+        if (!this.visible || !this.pickedBy(ptX, ptY))
+            return false;
         this.parentUI.configure('in_trial');
         this.parentUI.handleClick(ptX, ptY);
         return true;
@@ -602,10 +608,10 @@ class Reticle extends Target {
     // by starting the trial timer and moving to the 'in_trial' state.
     handleClickAt(ptX, ptY) {
         // === YOUR CODE HERE ===
+        if (!this.visible || !this.pickedBy(ptX, ptY))
+            return false;
         // parent.configure('begin_trial');
-        // === REMOVE THE FOLLOWING CODE (which is here so the skeleton code compiles) ===
-        return false;
-        // === END OF CODE TO BE REMOVED ===
+        return true;
     }
 }
 // Fixed diameter for all Reticle objects
@@ -654,6 +660,7 @@ class BackgroundDisplay extends ScreenObject {
         let ypos = 20 + fontHeight;
         let xpos = 10;
         // === YOUR CODE HERE ===
+        // Write messages on canvas screen
         if (this._msg1) {
             ctx.fillText(this._msg1, xpos, ypos);
             ypos += fontHeight + leading;
@@ -671,7 +678,8 @@ class BackgroundDisplay extends ScreenObject {
     // in which case we respond to this input by starting a new trial
     handleClickAt(ptX, ptY) {
         // === YOUR CODE HERE ===
-        this.parentUI.configure('start');
+        console.log("clicked canvas: begin trial");
+        this.parentUI.configure('begin_trial');
         return true;
     }
 }

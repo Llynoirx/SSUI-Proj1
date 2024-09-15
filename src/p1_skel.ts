@@ -510,6 +510,10 @@ class FittsTestUI extends UIClass {
                 // a bit more left to do...
                 // === YOUR CODE HERE ===
                 this.theTarget.visible = false;
+                this.canvas.onclick = (evt: MouseEvent) => {
+                    this.handleClick(evt.offsetX, evt.offsetY);
+                    console.log("canvas clicked");
+                };
 
 
             break;
@@ -712,6 +716,7 @@ class Target extends ScreenObject{
     override handleClickAt(ptX : number, ptY : number) : boolean {
         
         // === YOUR CODE HERE ===
+        if (!this.visible || !this.pickedBy(ptX, ptY)) return false;
         this.parentUI.configure('in_trial');
         this.parentUI.handleClick(ptX, ptY);
         return true;
@@ -806,11 +811,9 @@ class Reticle extends Target {
     override handleClickAt(ptX : number, ptY : number) : boolean {
         
         // === YOUR CODE HERE ===
+        if (!this.visible || !this.pickedBy(ptX, ptY)) return false;
         // parent.configure('begin_trial');
-        
-        // === REMOVE THE FOLLOWING CODE (which is here so the skeleton code compiles) ===
-        return false;
-        // === END OF CODE TO BE REMOVED ===
+        return true;
     }
 }
 
@@ -872,6 +875,7 @@ class BackgroundDisplay extends ScreenObject{
         let xpos : number = 10;
 
         // === YOUR CODE HERE ===
+        // Write messages on canvas screen
         if (this._msg1) {
             ctx.fillText(this._msg1, xpos, ypos);
             ypos += fontHeight + leading;
@@ -894,11 +898,10 @@ class BackgroundDisplay extends ScreenObject{
     override handleClickAt(ptX : number, ptY : number) : boolean {
         
         // === YOUR CODE HERE ===
-        this.parentUI.configure('start');
-        return true;
-        
+        console.log("clicked canvas: begin trial");
+        this.parentUI.configure('begin_trial');
+        return true; 
     }
 }
-
 // . . . . . . . . . . . .  . . . . . . . . . . . . . . . . . . . . . . 
 
