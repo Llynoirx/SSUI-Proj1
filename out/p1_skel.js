@@ -393,10 +393,10 @@ class FittsTestUI extends UIClass {
                     "  For each trial click the center of the blue target to begin";
                 this.theBackground.msg3 =
                     "  Then click inside the green circle that appears";
-                this.theReticle.visible = true;
+                this.theReticle.visible = false;
                 // a bit more left to do...
                 // === YOUR CODE HERE ===
-                this.theTarget.visible = true;
+                this.theTarget.visible = false;
                 break;
             case 'begin_trial': //displays Reticle: requires user to put mouse cursor on small circle
                 // === YOUR CODE HERE ===
