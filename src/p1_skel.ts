@@ -566,6 +566,7 @@ class FittsTestUI extends UIClass {
                 pickLocationsAndSize(this.canvas.width,this.canvas.height);
 
             // === YOUR CODE HERE ===
+            this.configure('begin_trial');
         }
     }
 
@@ -653,6 +654,13 @@ class Target extends ScreenObject{
     newGeom(newCentX : number, newCentY : number, newDiam? : number) {
         
         // === YOUR CODE HERE ===
+        this.centerX = newCentX;
+        this.centerY = newCentY;
+        
+        if (!(newDiam === undefined)) {
+            this._w = newDiam;
+            this._h = newDiam;
+        }
         
         this.declareDamaged();
     }
@@ -748,7 +756,10 @@ class Reticle extends Target {
     override draw(ctx : CanvasRenderingContext2D) : void {
         
         // === YOUR CODE HERE ===
-
+        const reticle = new Reticle();   
+        ctx.beginPath();
+        ctx.arc(recticle.centerX, 75, 50, 0, 2 * Math.PI);
+        ctx.stroke();
     }
 
     // . . . . . . . . . . . .  . . . . . . . . . . . . . . . . . . . . . . 

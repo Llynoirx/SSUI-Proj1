@@ -104,6 +104,7 @@ class UIClass {
     run() {
         // configure the interface initial state and draw it
         this.configure('start');
+        console.log("we want to redraw now");
         this.needsRedraw = true;
         this.redraw();
         // set up an event handler for the canvas to start processing events
@@ -123,6 +124,7 @@ class UIClass {
     redraw() {
         // only redraw if something indicated we need it
         if (this.needsRedraw) {
+            console.log("we need a redraw");
             // clear the background, then redraw each of the child objects
             this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
             for (const childObj of this.childObjects) {
@@ -388,6 +390,7 @@ class FittsTestUI extends UIClass {
         this.currentState = newState;
         switch (this.currentState) {
             case 'start': //display background w/ instructions
+                console.log("we've started!");
                 this.theBackground.msg1 = "Press anywhere to begin";
                 this.theBackground.msg2 =
                     "  For each trial click the center of the blue target to begin";
