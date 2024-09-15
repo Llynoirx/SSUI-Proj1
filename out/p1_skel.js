@@ -415,8 +415,8 @@ class FittsTestUI extends UIClass {
             case 'in_trial': //display a random sized Target (looks diff than Reticle)
                 // === YOUR CODE HERE ===
                 this.theBackground.msg1 = "";
-                this.theReticle.visible = true;
-                this.theTarget.visible = false;
+                this.theReticle.visible = false;
+                this.theTarget.visible = true;
                 this.canvas.onclick = (evt) => {
                     this.handleClick(evt.offsetX, evt.offsetY);
                 };
@@ -550,8 +550,8 @@ class Target extends ScreenObject {
         // === YOUR CODE HERE ===
         if (!this.visible || !this.pickedBy(ptX, ptY))
             return false;
-        this.parentUI.configure('in_trial');
-        this.parentUI.handleClick(ptX, ptY);
+        console.log("clicked target => begin_trial");
+        this.parentUI.configure('begin_trial');
         return true;
     }
 }
@@ -605,9 +605,8 @@ class Reticle extends Target {
     // Picking function. We are only picked within our small center region.
     pickedBy(ptX, ptY) {
         // === YOUR CODE HERE ===
-        // === REMOVE THE FOLLOWING CODE (which is here so the skeleton code compiles) ===
-        return false;
-        // === END OF CODE TO BE REMOVED ===
+        const dist = Math.sqrt(Math.pow(ptX - this.centerX, 2) + Math.pow(ptY - this.centerY, 2));
+        return dist <= this.radius;
     }
     // . . . . . . . . . . . .  . . . . . . . . . . . . . . . . . . . . . . 
     // Handle a potential click input.  When responding to this input we 
@@ -617,7 +616,8 @@ class Reticle extends Target {
         // === YOUR CODE HERE ===
         if (!this.visible || !this.pickedBy(ptX, ptY))
             return false;
-        // parent.configure('begin_trial');
+        console.log("clicked reticle => in_trial");
+        this.parentUI.configure('in_trial');
         return true;
     }
 }
@@ -685,7 +685,7 @@ class BackgroundDisplay extends ScreenObject {
     // in which case we respond to this input by starting a new trial
     handleClickAt(ptX, ptY) {
         // === YOUR CODE HERE ===
-        console.log("clicked canvas: begin trial");
+        console.log("clicked canvas => begin trial");
         this.parentUI.configure('begin_trial');
         return true;
     }

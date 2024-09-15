@@ -534,8 +534,8 @@ class FittsTestUI extends UIClass {
                 
                 // === YOUR CODE HERE ===
                 this.theBackground.msg1 = "";
-                this.theReticle.visible = true;
-                this.theTarget.visible = false;
+                this.theReticle.visible = false;
+                this.theTarget.visible = true;
 
                 this.canvas.onclick = (evt: MouseEvent) => {
                     this.handleClick(evt.offsetX, evt.offsetY);
@@ -726,8 +726,8 @@ class Target extends ScreenObject{
         
         // === YOUR CODE HERE ===
         if (!this.visible || !this.pickedBy(ptX, ptY)) return false;
-        this.parentUI.configure('in_trial');
-        this.parentUI.handleClick(ptX, ptY);
+        console.log("clicked target => begin_trial");
+        this.parentUI.configure('begin_trial');
         return true;
     }
 }
@@ -806,10 +806,8 @@ class Reticle extends Target {
     // Picking function. We are only picked within our small center region.
     override pickedBy(ptX : number, ptY : number) : boolean {
         // === YOUR CODE HERE ===
-        
-        // === REMOVE THE FOLLOWING CODE (which is here so the skeleton code compiles) ===
-        return false;
-        // === END OF CODE TO BE REMOVED ===
+        const dist = Math.sqrt(Math.pow(ptX - this.centerX, 2) + Math.pow(ptY - this.centerY, 2));
+        return dist <= this.radius;
     }
 
     // . . . . . . . . . . . .  . . . . . . . . . . . . . . . . . . . . . . 
@@ -821,7 +819,8 @@ class Reticle extends Target {
         
         // === YOUR CODE HERE ===
         if (!this.visible || !this.pickedBy(ptX, ptY)) return false;
-        // parent.configure('begin_trial');
+        console.log("clicked reticle => in_trial");
+        this.parentUI.configure('in_trial');
         return true;
     }
 }
@@ -907,7 +906,7 @@ class BackgroundDisplay extends ScreenObject{
     override handleClickAt(ptX : number, ptY : number) : boolean {
         
         // === YOUR CODE HERE ===
-        console.log("clicked canvas: begin trial");
+        console.log("clicked canvas => begin trial");
         this.parentUI.configure('begin_trial');
         return true; 
     }
