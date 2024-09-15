@@ -399,20 +399,27 @@ class FittsTestUI extends UIClass {
                 this.theTarget.visible = false;
                 this.canvas.onclick = (evt) => {
                     this.handleClick(evt.offsetX, evt.offsetY);
-                    console.log("canvas clicked");
                 };
                 break;
             case 'begin_trial': //displays Reticle: requires user to put mouse cursor on small circle
                 // === YOUR CODE HERE ===
                 this.theBackground.msg1 = "Trial #1 of 10";
+                this.theBackground.msg2 = "";
+                this.theBackground.msg3 = "";
                 this.theReticle.visible = true;
                 this.theTarget.visible = false;
+                this.canvas.onclick = (evt) => {
+                    this.handleClick(evt.offsetX, evt.offsetY);
+                };
                 break;
             case 'in_trial': //display a random sized Target (looks diff than Reticle)
                 // === YOUR CODE HERE ===
                 this.theBackground.msg1 = "";
                 this.theReticle.visible = true;
                 this.theTarget.visible = false;
+                this.canvas.onclick = (evt) => {
+                    this.handleClick(evt.offsetX, evt.offsetY);
+                };
                 break;
             case 'ended': //shows info screen that the game has ended
                 // === YOUR CODE HERE ===
