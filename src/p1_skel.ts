@@ -519,7 +519,7 @@ class FittsTestUI extends UIClass {
             case 'begin_trial': //displays Reticle: requires user to put mouse cursor on small circle
                 
                 // === YOUR CODE HERE ===
-                this.theBackground.msg1 = "Trial #1 of 10";
+                this.theBackground.msg1 = "Trial #" + this.trialCount + " of 10";
                 this.theBackground.msg2 = "";
                 this.theBackground.msg3 = "";
                 this.theReticle.visible = true;
@@ -727,7 +727,7 @@ class Target extends ScreenObject{
         // === YOUR CODE HERE ===
         if (!this.visible || !this.pickedBy(ptX, ptY)) return false;
         console.log("clicked target => begin_trial");
-        this.parentUI.configure('begin_trial');
+        this.parentUI.newTrial();
         return true;
     }
 }
@@ -782,13 +782,13 @@ class Reticle extends Target {
     
         // draw outer circle
         ctx.beginPath();
-        ctx.arc(this.centerX, this.centerY, outerRadius, 0, 2 * Math.PI);
+        ctx.arc(this.centerX, this.centerY, outerRadius, 0, 2*Math.PI);
         ctx.fill();
         ctx.stroke();
 
         // draw inner circle
         ctx.beginPath();
-        ctx.arc(this.centerX, this.centerY, innerRadius, 0, 2 * Math.PI);
+        ctx.arc(this.centerX, this.centerY, innerRadius, 0, 2*Math.PI);
         ctx.fill();
         ctx.stroke();
 
@@ -806,8 +806,9 @@ class Reticle extends Target {
     // Picking function. We are only picked within our small center region.
     override pickedBy(ptX : number, ptY : number) : boolean {
         // === YOUR CODE HERE ===
+        const innerRadius = Reticle.RETICLE_INNER_DIAM / 2;
         const dist = Math.sqrt(Math.pow(ptX - this.centerX, 2) + Math.pow(ptY - this.centerY, 2));
-        return dist <= this.radius;
+        return dist <= innerRadius;
     }
 
     // . . . . . . . . . . . .  . . . . . . . . . . . . . . . . . . . . . . 

@@ -403,7 +403,7 @@ class FittsTestUI extends UIClass {
                 break;
             case 'begin_trial': //displays Reticle: requires user to put mouse cursor on small circle
                 // === YOUR CODE HERE ===
-                this.theBackground.msg1 = "Trial #1 of 10";
+                this.theBackground.msg1 = "Trial #" + this.trialCount + " of 10";
                 this.theBackground.msg2 = "";
                 this.theBackground.msg3 = "";
                 this.theReticle.visible = true;
@@ -551,7 +551,7 @@ class Target extends ScreenObject {
         if (!this.visible || !this.pickedBy(ptX, ptY))
             return false;
         console.log("clicked target => begin_trial");
-        this.parentUI.configure('begin_trial');
+        this.parentUI.newTrial();
         return true;
     }
 }
@@ -605,8 +605,9 @@ class Reticle extends Target {
     // Picking function. We are only picked within our small center region.
     pickedBy(ptX, ptY) {
         // === YOUR CODE HERE ===
+        const innerRadius = Reticle.RETICLE_INNER_DIAM / 2;
         const dist = Math.sqrt(Math.pow(ptX - this.centerX, 2) + Math.pow(ptY - this.centerY, 2));
-        return dist <= this.radius;
+        return dist <= innerRadius;
     }
     // . . . . . . . . . . . .  . . . . . . . . . . . . . . . . . . . . . . 
     // Handle a potential click input.  When responding to this input we 
