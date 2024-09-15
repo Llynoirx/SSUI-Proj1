@@ -400,19 +400,19 @@ class FittsTestUI extends UIClass {
                 break;
             case 'begin_trial': //displays Reticle: requires user to put mouse cursor on small circle
                 // === YOUR CODE HERE ===
-                this.theBackground.msg1 = "Click the center of the blue target";
+                this.theBackground.msg1 = "Trial #1 of 10";
                 this.theReticle.visible = true;
-                this.theTarget.visible = true;
+                this.theTarget.visible = false;
                 break;
             case 'in_trial': //display a random sized Target (looks diff than Reticle)
                 // === YOUR CODE HERE ===
                 this.theBackground.msg1 = "";
                 this.theReticle.visible = true;
-                this.theTarget.visible = true;
+                this.theTarget.visible = false;
                 break;
             case 'ended': //shows info screen that the game has ended
                 // === YOUR CODE HERE ===
-                this.theBackground.msg1 = "All trials complete. Click to restart.";
+                this.theBackground.msg1 = "Done! Refresh the page to start again.";
                 this.theReticle.visible = false;
                 this.theTarget.visible = false;
                 // produce a dump of our data records on the console
@@ -514,6 +514,8 @@ class Target extends ScreenObject {
     // . . . . . . . . . . . .  . . . . . . . . . . . . . . . . . . . . . . 
     // Draw the object as a filled and outlined circle
     draw(ctx) {
+        if (!this.visible)
+            return;
         // === YOUR CODE HERE ===
         ctx.fillStyle = this.color;
         ctx.strokeStyle = 'black';
@@ -525,10 +527,8 @@ class Target extends ScreenObject {
     // . . . . . . . . . . . .  . . . . . . . . . . . . . . . . . . . . . . 
     // Pick function.  We only pick within our circle, not the entire bounding box
     pickedBy(ptX, ptY) {
-        // === YOUR CODE HERE ===
-        const ptX2 = this.centerX + this.radius;
-        const ptY2 = this.centerY + this.radius;
-        const dist = Math.sqrt(Math.pow(ptX - ptX2, 2) + Math.pow(ptY - ptY2, 2));
+        // === YOUR CODE HERE ==
+        const dist = Math.sqrt(Math.pow(ptX - this.centerX, 2) + Math.pow(ptY - this.centerY, 2));
         return dist <= this.radius;
     }
     // . . . . . . . . . . . .  . . . . . . . . . . . . . . . . . . . . . . 

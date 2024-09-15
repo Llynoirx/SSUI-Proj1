@@ -660,7 +660,7 @@ class Target extends ScreenObject{
         if (!(newDiam === undefined)) {
             this.diam = newDiam;
         }
-        
+
         this.declareDamaged();
     }
     
@@ -682,6 +682,7 @@ class Target extends ScreenObject{
     
     // Draw the object as a filled and outlined circle
     override draw(ctx : CanvasRenderingContext2D) : void {
+        if (!this.visible) return;
         
         // === YOUR CODE HERE ===
         ctx.fillStyle = this.color;
@@ -698,11 +699,8 @@ class Target extends ScreenObject{
     // Pick function.  We only pick within our circle, not the entire bounding box
     override pickedBy(ptX : number, ptY : number) : boolean {
         
-        // === YOUR CODE HERE ===
-        const ptX2 = this.centerX + this.radius;
-        const ptY2 = this.centerY + this.radius;
-        const dist = Math.sqrt(Math.pow(ptX - ptX2, 2) + Math.pow(ptY - ptY2, 2));
-    
+        // === YOUR CODE HERE ==
+        const dist = Math.sqrt(Math.pow(ptX - this.centerX, 2) + Math.pow(ptY - this.centerY, 2));
         return dist <= this.radius;
     }
 
