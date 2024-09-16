@@ -174,7 +174,6 @@ class UIClass {
 
         // try to dispatch this to each object (in reverse drawing order) 
         // until one handles it
-        console.log("this.childObjects", this.childObjects)
         for (let i = this.childObjects.length-1; i >= 0; i--) {
             if (this.childObjects[i].handleClickAt(x,y)) {
                 // If something indicated a change to screen contents, redraw
@@ -570,9 +569,6 @@ class FittsTestUI extends UIClass {
                 pickLocationsAndSize(this.canvas.width,this.canvas.height);
 
             // === YOUR CODE HERE ===
-            // this._theReticle  = new Reticle(retX, retY,this);
-            // this._theTarget  = new Target(targX, targY, targDiam,this);
-            // this.theReticle.retX = retX;
 
             this._theReticle.newGeom(retX, retY);
             this.theTarget.newGeom(targX, targY, targDiam);
@@ -628,9 +624,9 @@ class FittsTestUI extends UIClass {
     // Present the data we have collected after a set of trials completes.
     // This currently just prints the data to the console in a CSV format.
     presentData() {
-        // console.log("Data dump...");
+        console.log("Data dump...");
         for (let i = 0; i < this.trialData.length; i++) {
-            // console.log("" + i + ":" + this.trialData[i].toString());
+            console.log("" + i + ":" + this.trialData[i].toString());
             console.log(this.trialData[i].toString());
         }
     }
@@ -714,10 +710,8 @@ class Target extends ScreenObject{
     override pickedBy(ptX : number, ptY : number) : boolean {
         
         // === YOUR CODE HERE ==
-        console.log(ptX, ptY, this.centerX, this.centerY, this);
         const dist = Math.sqrt(Math.pow(ptX - this.centerX, 2) 
                              + Math.pow(ptY - this.centerY, 2));
-        console.log(dist, this.radius);
         return dist <= this.radius;
     }
 
@@ -729,7 +723,6 @@ class Target extends ScreenObject{
     override handleClickAt(ptX : number, ptY : number) : boolean {
         
         // === YOUR CODE HERE ===
-        console.log(!this.visible, !this.pickedBy(ptX, ptY));
         if (!this.visible || !this.pickedBy(ptX, ptY)) return false;
         console.log("clicked target");
         this.parentUI.newTrial();
