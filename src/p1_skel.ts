@@ -563,7 +563,7 @@ class FittsTestUI extends UIClass {
         if (this.trialCount > this.MAX_TRIALS) {
             this.configure('ended');
         } else { // otherwise we have a normal trial...
-            console.log("ENTERED NEW TRIAL");
+            console.log("TRIAL", this.trialCount);
             // make new random locations for reticle and target 
             const {retX:retX, retY:retY, targX:targX, targY:targY, targD:targDiam} = 
                 pickLocationsAndSize(this.canvas.width,this.canvas.height);
@@ -910,7 +910,7 @@ class BackgroundDisplay extends ScreenObject{
         // === YOUR CODE HERE ===
         if(this.parentUI.currentState === 'start'){
             console.log("clicked canvas");
-            this.parentUI.configure('begin_trial');
+            this.parentUI.newTrial();
             return true; 
         }
         return false;
