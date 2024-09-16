@@ -573,6 +573,9 @@ class FittsTestUI extends UIClass {
             // this._theReticle  = new Reticle(retX, retY,this);
             // this._theTarget  = new Target(targX, targY, targDiam,this);
             // this.theReticle.retX = retX;
+
+            this._theReticle.newGeom(retX, retY);
+            this.theTarget.newGeom(targX, targY, targDiam);
             
             this.needsRedraw = true;
             this.redraw();
