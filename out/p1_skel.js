@@ -288,12 +288,12 @@ class FittsTrialRecord {
     }
     toString() {
         // Excel friendly (CSV) format...
-        return `${twoPlaces(this.startTime)}, ${twoPlaces(this.endTime)}, ` +
-            `${twoPlaces(this.dist)}, ${twoPlaces(this.targetDiam)}`;
+        // return `${twoPlaces(this.startTime)}, ${twoPlaces(this.endTime)}, ` +
+        //     `${twoPlaces(this.dist)}, ${twoPlaces(this.targetDiam)}`;
         // more human readable format...
-        // return `[start:${twoPlaces(this.startTime)}, end:${twoPlaces(this.endTime)}, ` +
-        //         `dist:${twoPlaces(this.dist)}, w:${twoPlaces(this.targetDiam)}] ` + 
-        //         `dur=${twoPlaces(this.duration)}msec ID=${twoPlaces(this.indexOfDiff)}`;
+        return `[start:${twoPlaces(this.startTime)}, end:${twoPlaces(this.endTime)}, ` +
+            `dist:${twoPlaces(this.dist)}, w:${twoPlaces(this.targetDiam)}] ` +
+            `dur=${twoPlaces(this.duration)}msec ID=${twoPlaces(this.indexOfDiff)}`;
     }
 }
 // . . . . . . . . . . . .  . . . . . . . . . . . . . . . . . . . . . . 
@@ -429,13 +429,13 @@ class FittsTestUI extends UIClass {
     // reticle and target and changing the global state to 'begin_trial' (or 'ended' if 
     // we have already done all our trials).
     newTrial() {
-        console.log("entered new trial");
         // count the trial and go to the end state if we've done them all
         this.trialCount++;
         if (this.trialCount > this.MAX_TRIALS) {
             this.configure('ended');
         }
         else { // otherwise we have a normal trial...
+            console.log("ENTERED NEW TRIAL");
             // make new random locations for reticle and target 
             const { retX: retX, retY: retY, targX: targX, targY: targY, targD: targDiam } = pickLocationsAndSize(this.canvas.width, this.canvas.height);
             // === YOUR CODE HERE ===
@@ -444,6 +444,7 @@ class FittsTestUI extends UIClass {
             this.needsRedraw = true;
             this.redraw();
             this.configure('begin_trial');
+            this.startTrial(retX, retY);
         }
     }
     get trialData() { return this._trialData; }
@@ -473,7 +474,7 @@ class FittsTestUI extends UIClass {
         console.log("Data dump...");
         for (let i = 0; i < this.trialData.length; i++) {
             console.log("" + i + ":" + this.trialData[i].toString());
-            console.log(this.trialData[i].toString());
+            // console.log(this.trialData[i].toString());
         }
     }
 }
@@ -547,7 +548,8 @@ class Target extends ScreenObject {
         // === YOUR CODE HERE ===
         if (!this.visible || !this.pickedBy(ptX, ptY))
             return false;
-        console.log("clicked target");
+        console.log("2) clicked target");
+        this.parentUI.recordTrialEnd(ptX, ptY, this.diam);
         this.parentUI.newTrial();
         return true;
     }
@@ -615,7 +617,7 @@ class Reticle extends Target {
         // === YOUR CODE HERE ===
         if (!this.visible || !this.pickedBy(ptX, ptY))
             return false;
-        console.log("clicked reticle");
+        console.log("1) clicked reticle");
         this.parentUI.configure('in_trial');
         return true;
     }
