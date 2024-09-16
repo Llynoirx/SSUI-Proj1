@@ -174,6 +174,7 @@ class UIClass {
 
         // try to dispatch this to each object (in reverse drawing order) 
         // until one handles it
+        console.log("this.childObjects", this.childObjects)
         for (let i = this.childObjects.length-1; i >= 0; i--) {
             if (this.childObjects[i].handleClickAt(x,y)) {
                 // If something indicated a change to screen contents, redraw
@@ -510,9 +511,6 @@ class FittsTestUI extends UIClass {
                 // a bit more left to do...
                 // === YOUR CODE HERE ===
                 this.theTarget.visible = false;
-                this.canvas.onclick = (evt: MouseEvent) => {
-                    this.handleClick(evt.offsetX, evt.offsetY);
-                };
 
 
             break;
@@ -524,10 +522,6 @@ class FittsTestUI extends UIClass {
                 this.theBackground.msg3 = "";
                 this.theReticle.visible = true;
                 this.theTarget.visible = false;
-                
-                this.canvas.onclick = (evt: MouseEvent) => {
-                    this.handleClick(evt.offsetX, evt.offsetY);
-                };
         
             break;
             case 'in_trial': //display a random sized Target (looks diff than Reticle)
@@ -536,10 +530,6 @@ class FittsTestUI extends UIClass {
                 this.theBackground.msg1 = "";
                 this.theReticle.visible = false;
                 this.theTarget.visible = true;
-
-                this.canvas.onclick = (evt: MouseEvent) => {
-                    this.handleClick(evt.offsetX, evt.offsetY);
-                };
         
             break;
             case 'ended': //shows info screen that the game has ended
@@ -569,6 +559,7 @@ class FittsTestUI extends UIClass {
     // reticle and target and changing the global state to 'begin_trial' (or 'ended' if 
     // we have already done all our trials).
     newTrial() {
+        console.log("entered new trial");
         // count the trial and go to the end state if we've done them all
         this.trialCount++;
         if (this.trialCount > this.MAX_TRIALS) {
@@ -579,6 +570,13 @@ class FittsTestUI extends UIClass {
                 pickLocationsAndSize(this.canvas.width,this.canvas.height);
 
             // === YOUR CODE HERE ===
+            // this._theReticle  = new Reticle(retX, retY,this);
+            // this._theTarget  = new Target(targX, targY, targDiam,this);
+            // this.theReticle.retX = retX;
+            
+            this.needsRedraw = true;
+            this.redraw();
+
             this.configure('begin_trial');
         }
     }
@@ -702,7 +700,7 @@ class Target extends ScreenObject{
         ctx.strokeStyle = 'black'; 
     
         ctx.beginPath();
-        ctx.arc(this._x, this._y, this.radius, 0, 2 * Math.PI);
+        ctx.arc(this.centerX, this.centerY, this.radius, 0, 2 * Math.PI);
         ctx.fill();
         ctx.stroke();
     }
@@ -713,7 +711,10 @@ class Target extends ScreenObject{
     override pickedBy(ptX : number, ptY : number) : boolean {
         
         // === YOUR CODE HERE ==
-        const dist = Math.sqrt(Math.pow(ptX - this.centerX, 2) + Math.pow(ptY - this.centerY, 2));
+        console.log(ptX, ptY, this.centerX, this.centerY, this);
+        const dist = Math.sqrt(Math.pow(ptX - this.centerX, 2) 
+                             + Math.pow(ptY - this.centerY, 2));
+        console.log(dist, this.radius);
         return dist <= this.radius;
     }
 
@@ -725,8 +726,9 @@ class Target extends ScreenObject{
     override handleClickAt(ptX : number, ptY : number) : boolean {
         
         // === YOUR CODE HERE ===
+        console.log(!this.visible, !this.pickedBy(ptX, ptY));
         if (!this.visible || !this.pickedBy(ptX, ptY)) return false;
-        console.log("clicked target => begin_trial");
+        console.log("clicked target");
         this.parentUI.newTrial();
         return true;
     }
@@ -807,7 +809,8 @@ class Reticle extends Target {
     override pickedBy(ptX : number, ptY : number) : boolean {
         // === YOUR CODE HERE ===
         const innerRadius = Reticle.RETICLE_INNER_DIAM / 2;
-        const dist = Math.sqrt(Math.pow(ptX - this.centerX, 2) + Math.pow(ptY - this.centerY, 2));
+        const dist = Math.sqrt(Math.pow(ptX - this.centerX, 2) 
+                             + Math.pow(ptY - this.centerY, 2));
         return dist <= innerRadius;
     }
 
@@ -820,7 +823,7 @@ class Reticle extends Target {
         
         // === YOUR CODE HERE ===
         if (!this.visible || !this.pickedBy(ptX, ptY)) return false;
-        console.log("clicked reticle => in_trial");
+        console.log("clicked reticle");
         this.parentUI.configure('in_trial');
         return true;
     }
@@ -907,9 +910,12 @@ class BackgroundDisplay extends ScreenObject{
     override handleClickAt(ptX : number, ptY : number) : boolean {
         
         // === YOUR CODE HERE ===
-        console.log("clicked canvas => begin trial");
-        this.parentUI.configure('begin_trial');
-        return true; 
+        if(this.parentUI.currentState === 'start'){
+            console.log("clicked canvas");
+            this.parentUI.configure('begin_trial');
+            return true; 
+        }
+        return false;
     }
 }
 // . . . . . . . . . . . .  . . . . . . . . . . . . . . . . . . . . . . 
